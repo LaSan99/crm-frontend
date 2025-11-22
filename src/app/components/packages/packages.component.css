@@ -1,0 +1,67 @@
+/* Additional styles for packages component */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom scrollbar for sidebar */
+.w-64::-webkit-scrollbar {
+  width: 6px;
+}
+
+.w-64::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.w-64::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.w-64::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Package card animations */
+.grid > div {
+  transition: all 0.3s ease-in-out;
+}
+
+.grid > div:hover {
+  transform: translateY(-4px);
+}
+
+/* Badge animations */
+span {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Button hover effects */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Price display */
+.text-3xl {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Feature icons */
+svg {
+  transition: transform 0.2s ease-in-out;
+}
+
+.grid > div:hover svg {
+  transform: scale(1.1);
+}

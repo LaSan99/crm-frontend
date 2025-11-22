@@ -1,0 +1,31 @@
+/* Additional styles for dashboard */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom scrollbar for sidebar */
+.w-64::-webkit-scrollbar {
+  width: 6px;
+}
+
+.w-64::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.w-64::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.w-64::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
