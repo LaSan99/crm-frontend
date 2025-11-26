@@ -12,6 +12,11 @@ export interface User {
   fullName: string;
   role: string;
   enabled: boolean;
+  address?: string;
+  msisdn?: string;
+  category?: string;
+  contactDetails?: string;
+  createdAt?: string;
 }
 
 @Component({
@@ -105,6 +110,10 @@ export class UsersComponent {
     this.editingUser.set(null);
   }
 
+  viewUserDetails(user: User): void {
+    this.router.navigate(['/users', user.id]);
+  }
+
   editUser(user: User): void {
     this.editingUser.set(user);
     this.showCreateForm.set(false);
@@ -140,6 +149,17 @@ export class UsersComponent {
 
   getStatusBadgeClass(enabled: boolean): string {
     return enabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+  }
+
+  getCategoryBadgeClass(category: string): string {
+    switch (category) {
+      case 'PREPAID':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'POSTPAID':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
   }
 
   goBack(): void {
