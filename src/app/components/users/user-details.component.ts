@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { UserPackageFormComponent } from './user-package-form.component';
 
 export interface User {
   id: number;
@@ -21,7 +22,7 @@ export interface User {
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UserPackageFormComponent],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css'
 })
@@ -32,8 +33,11 @@ export class UserDetailsComponent implements OnInit {
   private readonly authService = inject(AuthService);
 
   user = signal<User | null>(null);
+  userPackages = signal<any[]>([]);
   isLoading = signal(true);
+  isLoadingPackages = signal(false);
   errorMessage = signal('');
+  showPackageForm = signal(false);
 
   currentUser = computed(() => this.authService.currentUser());
 
@@ -41,6 +45,7 @@ export class UserDetailsComponent implements OnInit {
     const userId = this.route.snapshot.paramMap.get('id');
     if (userId) {
       this.loadUserDetails(+userId);
+      this.loadUserPackages(+userId);
     } else {
       this.errorMessage.set('User ID not provided');
       this.isLoading.set(false);
@@ -156,5 +161,41 @@ export class UserDetailsComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  private loadUserPackages(userId: number): void {
+    this.isLoadingPackages.set(true);
+    
+    this.http.get<any[]>(`http://localhost:8080/api/admin/users/${userId}/packages`, {
+      headers: this.authService.getAuthHeaders()
+    }).subscribe({
+      next: (packages) => {
+        this.userPackages.set(packages);
+      },
+      error: (error) => {
+        console.error('Failed to load user packages:', error);
+        // Don't set error message for packages, just log it
+      },
+      complete: () => {
+        this.isLoadingPackages.set(false);
+      }
+    });
+  }
+
+  showCreatePackageForm(): void {
+    this.showPackageForm.set(true);
+  }
+
+  closePackageForm(): void {
+    this.showPackageForm.set(false);
+  }
+
+  onPackageCreated(packageData: any): void {
+    this.closePackageForm();
+    // Reload packages to show the new one
+    const currentUser = this.user();
+    if (currentUser) {
+      this.loadUserPackages(currentUser.id);
+    }
   }
 }

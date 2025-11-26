@@ -1,0 +1,172 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-purple-600 to-purple-800 text-white p-6 rounded-t-xl">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">Create Package for User</h2>
+          <p class="text-purple-200 mt-1" *ngIf="user">
+            Creating package for: <span class="font-semibold">{{ user!.fullName }}</span>
+            <span class="ml-2 px-2 py-1 bg-purple-700 rounded-full text-xs">
+              {{ user!.category }}
+            </span>
+          </p>
+        </div>
+        <button (click)="closeForm()" class="text-white hover:text-purple-200 transition duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+      <!-- Messages -->
+      <div *ngIf="successMessage()" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+        {{ successMessage() }}
+      </div>
+      <div *ngIf="errorMessage()" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        {{ errorMessage() }}
+      </div>
+
+      <!-- Package Templates -->
+      <div *ngIf="filteredTemplates().length > 0" class="mb-8">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Templates</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div *ngFor="let template of filteredTemplates()" 
+               class="border border-gray-200 rounded-lg p-4 hover:border-purple-400 cursor-pointer transition duration-200"
+               (click)="useTemplate(template)">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold text-gray-900">{{ template.name }}</h4>
+              <span class="px-2 py-1 text-xs font-semibold rounded-full" [class]="getPackageTypeBadgeClass(template.packageType)">
+                {{ template.packageType }}
+              </span>
+            </div>
+            <p class="text-sm text-gray-600 mb-3">{{ template.description }}</p>
+            <div class="text-2xl font-bold text-purple-600">${{ template.price }}</div>
+            <div class="mt-2 text-xs text-gray-500">
+              <span>{{ template.dataLimitGB }}GB</span> • 
+              <span>{{ template.voiceMinutes }} min</span> • 
+              <span>{{ template.smsCount }} SMS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Package Form -->
+      <form (ngSubmit)="createPackage()" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Description -->
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Package Description *</label>
+            <textarea [(ngModel)]="package().description" name="description" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      rows="3" placeholder="Describe the package features and benefits"></textarea>
+          </div>
+
+          <!-- Price -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Price ($) *</label>
+            <input type="number" [(ngModel)]="package().price" name="price" required min="0" step="0.01"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                   placeholder="29.99">
+          </div>
+
+          <!-- Package Type -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Package Type *</label>
+            <select [(ngModel)]="package().packageType" name="packageType" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              <option value="PREPAID">Prepaid</option>
+              <option value="POSTPAID">Postpaid</option>
+            </select>
+            <p class="mt-1 text-xs text-gray-500">
+              Must match user category: <span class="font-semibold">{{ user?.category }}</span>
+            </p>
+          </div>
+
+          <!-- Data Limit -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Data Limit (GB) *</label>
+            <input type="number" [(ngModel)]="package().dataLimitGB" name="dataLimitGB" required min="0"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                   placeholder="10">
+          </div>
+
+          <!-- Voice Minutes -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Voice Minutes *</label>
+            <input type="number" [(ngModel)]="package().voiceMinutes" name="voiceMinutes" required min="0"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                   placeholder="1000">
+          </div>
+
+          <!-- SMS Count -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">SMS Count *</label>
+            <input type="number" [(ngModel)]="package().smsCount" name="smsCount" required min="0"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                   placeholder="500">
+          </div>
+        </div>
+
+        <!-- Package Preview -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="font-semibold text-gray-900 mb-3">Package Preview</h4>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <span class="text-gray-500">Type:</span>
+              <span class="ml-2 px-2 py-1 text-xs font-semibold rounded-full" [class]="getPackageTypeBadgeClass(package().packageType)">
+                {{ package().packageType }}
+              </span>
+            </div>
+            <div>
+              <span class="text-gray-500">Price:</span>
+              <span class="ml-2 font-semibold text-purple-600">${{ package().price || 0 }}</span>
+            </div>
+            <div>
+              <span class="text-gray-500">Data:</span>
+              <span class="ml-2 font-semibold">{{ package().dataLimitGB || 0 }}GB</span>
+            </div>
+            <div>
+              <span class="text-gray-500">Voice:</span>
+              <span class="ml-2 font-semibold">{{ package().voiceMinutes || 0 }} min</span>
+            </div>
+            <div class="md:col-span-2">
+              <span class="text-gray-500">SMS:</span>
+              <span class="ml-2 font-semibold">{{ package().smsCount || 0 }}</span>
+            </div>
+            <div class="md:col-span-2">
+              <span class="text-gray-500">Description:</span>
+              <span class="ml-2">{{ package().description || 'No description' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+          <button type="button" (click)="resetForm()" 
+                  class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200">
+            Reset Form
+          </button>
+          <button type="button" (click)="closeForm()" 
+                  class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="isLoading()" 
+                  class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-200 disabled:opacity-50">
+            <span *ngIf="!isLoading()">Create Package</span>
+            <span *ngIf="isLoading()" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Creating...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
