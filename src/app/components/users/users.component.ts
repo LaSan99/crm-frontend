@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { UserFormComponent } from './user-form.component';
+import { LayoutComponent } from '../layout/layout.component';
 
 export interface User {
   id: number;
@@ -22,7 +23,7 @@ export interface User {
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, UserFormComponent],
+  imports: [CommonModule, UserFormComponent, LayoutComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -162,7 +163,4 @@ export class UsersComponent {
     }
   }
 
-  goBack(): void {
-    this.router.navigate(['/dashboard']);
-  }
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { PackageFormComponent } from './package-form.component';
+import { LayoutComponent } from '../layout/layout.component';
 
 export interface Package {
   id: number;
@@ -21,7 +22,7 @@ export interface Package {
 @Component({
   selector: 'app-packages',
   standalone: true,
-  imports: [CommonModule, PackageFormComponent],
+  imports: [CommonModule, PackageFormComponent, LayoutComponent],
   templateUrl: './packages.component.html',
   styleUrl: './packages.component.css'
 })
@@ -135,10 +136,6 @@ export class PackagesComponent {
     if (price < 30) return 'text-green-600 font-semibold';
     if (price < 60) return 'text-blue-600 font-semibold';
     return 'text-purple-600 font-semibold';
-  }
-
-  goBack(): void {
-    this.router.navigate(['/dashboard']);
   }
 
   refreshPackages(): void {

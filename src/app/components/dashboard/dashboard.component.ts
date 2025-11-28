@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { LayoutComponent } from '../layout/layout.component';
 
 export interface DashboardStats {
   totalUsers: number;
@@ -13,7 +14,7 @@ export interface DashboardStats {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LayoutComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -30,7 +31,6 @@ export class DashboardComponent {
 
   isLoading = signal(true);
   errorMessage = signal('');
-  currentTime = signal(new Date().toLocaleString());
 
   currentUser = computed(() => this.authService.currentUser());
   isLoggedIn = computed(() => this.authService.isLoggedIn());
@@ -40,13 +40,6 @@ export class DashboardComponent {
     this.authService = authService;
     this.http = http;
     this.loadDashboardStats();
-    this.updateTime();
-  }
-
-  private updateTime(): void {
-    setInterval(() => {
-      this.currentTime.set(new Date().toLocaleString());
-    }, 1000);
   }
 
   private loadDashboardStats(): void {
@@ -66,18 +59,6 @@ export class DashboardComponent {
         this.isLoading.set(false);
       }
     });
-  }
-
-  logout(): void {
-    this.authService.logout();
-  }
-
-  navigateToUsers(): void {
-    this.router.navigate(['/users']);
-  }
-
-  navigateToPackages(): void {
-    this.router.navigate(['/packages']);
   }
 
   refreshStats(): void {
