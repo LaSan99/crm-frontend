@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { UserPackageFormComponent } from './user-package-form.component';
+import { LayoutComponent } from '../layout/layout.component';
 
 export interface User {
   id: number;
@@ -22,7 +23,7 @@ export interface User {
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [CommonModule, UserPackageFormComponent],
+  imports: [CommonModule, UserPackageFormComponent, LayoutComponent],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css'
 })
