@@ -4,6 +4,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserDetailsComponent } from './components/users/user-details.component';
 import { PackagesComponent } from './components/packages/packages.component';
+import { InquiriesComponent } from './components/inquiries/inquiries.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [authGuard] },
   { path: 'users/:id', component: UserDetailsComponent, canActivate: [authGuard] },
   { path: 'packages', component: PackagesComponent, canActivate: [authGuard] },
+  { path: 'inquiries', component: InquiriesComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/login' }
 ];

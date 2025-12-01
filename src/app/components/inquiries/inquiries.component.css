@@ -1,0 +1,85 @@
+/* Additional styles for inquiries component */
+.inquiry-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.inquiry-item:hover {
+  transform: translateX(2px);
+}
+
+.inquiry-item.selected {
+  background-color: #eff6ff;
+  border-left: 4px solid #2563eb;
+}
+
+.status-badge {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.type-badge {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.reply-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.customer-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.message-bubble {
+  position: relative;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.customer-message {
+  background-color: #f9fafb;
+  border-left: 3px solid #6b7280;
+}
+
+.admin-message {
+  background-color: #eff6ff;
+  border-left: 3px solid #2563eb;
+}
+
+.inquiry-list {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.inquiry-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inquiry-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.inquiry-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.inquiry-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 1024px) {
+  .inquiry-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .inquiry-list {
+    max-height: 400px;
+  }
+}
