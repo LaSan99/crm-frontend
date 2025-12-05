@@ -98,15 +98,15 @@ export class InquiriesComponent {
       return;
     }
 
-    this.http.put(`http://localhost:8080/api/admin/inquiries/${inquiry.id}/respond`, {
+    this.http.put<Inquiry>(`http://localhost:8080/api/admin/inquiries/${inquiry.id}/respond`, {
       response: this.replyText
     }, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
-      next: () => {
+      next: (updatedInquiry) => {
         this.successMessage.set('Response sent successfully');
         this.loadInquiries();
-        this.selectInquiry(inquiry);
+        this.selectInquiry(updatedInquiry);
         this.clearMessages();
       },
       error: (error) => {
@@ -117,13 +117,13 @@ export class InquiriesComponent {
   }
 
   updateInquiryStatus(inquiry: Inquiry, newStatus: string): void {
-    this.http.put(`http://localhost:8080/api/admin/inquiries/${inquiry.id}/status`, {
+    this.http.put<Inquiry>(`http://localhost:8080/api/admin/inquiries/${inquiry.id}/status`, {
       status: newStatus
     }, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
-      next: () => {
-        this.successMessage.set(`Inquiry status updated to ${newStatus}`);
+      next: (updatedInquiry) => {
+        this.successMessage.set(`Inquiry status updated to ${updatedInquiry.status}`);
         this.loadInquiries();
         this.clearMessages();
       },

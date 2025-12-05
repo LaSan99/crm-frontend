@@ -73,11 +73,11 @@ export class UsersComponent {
   }
 
   toggleUserStatus(user: User): void {
-    this.http.put(`http://localhost:8080/api/admin/users/${user.id}/toggle-status`, {}, {
+    this.http.put<User>(`http://localhost:8080/api/admin/users/${user.id}/toggle-status`, {}, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
-      next: () => {
-        this.successMessage.set(`User ${user.username} status updated successfully`);
+      next: (updatedUser) => {
+        this.successMessage.set(`User ${updatedUser.username} status updated successfully`);
         this.loadUsers();
         this.clearMessages();
       },
